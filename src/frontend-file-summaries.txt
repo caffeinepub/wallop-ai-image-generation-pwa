@@ -1,0 +1,16 @@
+{
+  "frontend/src/App.tsx": "Main application component with authentication flow, profile setup, routing, and full-screen skull-flames background with \"Wall Pop\" branding throughout.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including user profiles, images, prompts, admin stats, and mutations with proper invalidation.",
+  "frontend/src/components/Header.tsx": "Sticky header with \"Wall Pop\" branding, semi-transparent dark background for readability, admin panel toggle, and login/logout functionality.",
+  "frontend/src/components/Footer.tsx": "Footer with dynamic copyright year, red heart icon, and caffeine.ai attribution with UTM tracking using hostname as app identifier, styled with semi-transparent dark background.",
+  "frontend/src/components/ProfileSetup.tsx": "Profile setup modal for first-time users with semi-transparent dark background and improved text contrast for readability.",
+  "frontend/src/pages/HomePage.tsx": "Main page with tabbed interface switching between Generate and Gallery sections, featuring semi-transparent dark backgrounds on tab controls for improved readability.",
+  "frontend/src/components/LoginPrompt.tsx": "Landing page for unauthenticated users with \"Wall Pop\" branding, hero section, feature cards, and sample images, all with semi-transparent dark backgrounds for improved text readability.",
+  "frontend/src/components/GenerateSection.tsx": "Image generation interface with instant display, Regenerate button, Undo/Redo system, and all text elements enhanced with semi-transparent dark backgrounds for readability over the dramatic skull-flames background.",
+  "frontend/src/components/GallerySection.tsx": "Grid gallery of published images with modal view, download functionality, delete option, and semi-transparent dark backgrounds for all text content to ensure readability.",
+  "frontend/src/pages/AdminPanel.tsx": "Admin dashboard showing content statistics with \"Wall Pop\" branding and semi-transparent dark backgrounds on all cards and text elements for enhanced readability.",
+  "frontend/src/index.css": "Global styles with OKLCH color system, skull-flames background utility, and new text readability utilities for semi-transparent dark backgrounds.",
+  "frontend/index.html": "HTML entry point with updated title and meta tags for \"Wall Pop\" branding and PWA configuration.",
+  "frontend/public/manifest.json": "PWA manifest with \"Wall Pop\" branding, black theme colors, and app metadata for installability.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended design tokens including enhanced shadows and backdrop blur for high contrast overlay elements on dramatic background."
+}

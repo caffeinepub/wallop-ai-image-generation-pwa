@@ -1,0 +1,146 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix Wall Pop branding, improve text readability, and audit functionality",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Update all references from 'Wallop' to 'Wall Pop' throughout the application",
+      "acceptanceCriteria": [
+        "All visible branding displays 'Wall Pop' instead of 'Wallop'",
+        "Browser tab title shows 'Wall Pop'",
+        "PWA manifest displays 'Wall Pop' as the app name"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Update the logo text from 'Wallop' to 'Wall Pop' in the Header component"
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Update the page title in the <title> tag from any references to 'Wallop' to 'Wall Pop'"
+        },
+        {
+          "path": "frontend/public/manifest.json",
+          "operation": "modify",
+          "description": "Update the 'name' and 'short_name' fields from 'Wallop' to 'Wall Pop' in the PWA manifest"
+        },
+        {
+          "path": "frontend/src/components/LoginPrompt.tsx",
+          "operation": "modify",
+          "description": "Update any references to 'Wallop' to 'Wall Pop' in the hero section and feature cards"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Improve text readability by adding semi-transparent dark backgrounds behind all text content",
+      "acceptanceCriteria": [
+        "All text content has a semi-transparent background overlay for improved contrast",
+        "Text is clearly readable against the skull-flames background",
+        "Text contrast ratios meet WCAG AA standards (4.5:1 for normal text)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add utility classes for semi-transparent dark text backgrounds with sufficient opacity (e.g., bg-black/70, bg-black/80) to ensure WCAG AA 4.5:1 contrast ratio against the skull-flames background"
+        },
+        {
+          "path": "frontend/src/components/LoginPrompt.tsx",
+          "operation": "modify",
+          "description": "Apply semi-transparent dark background overlays to all text sections including the hero heading, description, and feature card text to improve readability against the skull-flames background"
+        },
+        {
+          "path": "frontend/src/components/GenerateSection.tsx",
+          "operation": "modify",
+          "description": "Add semi-transparent dark backgrounds to text elements including section headers, labels, and descriptions to ensure readability when displayed over the skull-flames background"
+        },
+        {
+          "path": "frontend/src/components/GallerySection.tsx",
+          "operation": "modify",
+          "description": "Apply semi-transparent dark backgrounds to image metadata text, tags, and descriptions in the gallery grid and modal dialog"
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Add semi-transparent dark backgrounds to stat labels, numbers, and section headers in the admin panel for improved contrast"
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Apply semi-transparent dark backgrounds to tab labels and navigation elements on the main page"
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Conduct comprehensive audit of all application functionality and fix non-working features",
+      "acceptanceCriteria": [
+        "Image generation successfully creates and displays images",
+        "Gallery displays all published images correctly",
+        "Download functionality works for all images",
+        "Delete operations remove images as expected",
+        "Authentication and profile setup flow completes without errors",
+        "Admin panel displays correct statistics and is accessible only to admins",
+        "All interactive elements respond appropriately to user actions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/GenerateSection.tsx",
+          "operation": "modify",
+          "description": "Audit and fix image generation logic for both text-to-image and image-to-image modes: verify prompt submission, image upload handling, generation API calls, error handling, and display of generated images with proper loading states"
+        },
+        {
+          "path": "frontend/src/components/GallerySection.tsx",
+          "operation": "modify",
+          "description": "Audit and fix gallery functionality: verify published images are fetched and displayed correctly, image modal opens with correct details, download button triggers proper file download using ExternalBlob.getDirectURL(), and delete operations remove images with proper confirmation and cache invalidation"
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Audit all query and mutation hooks: verify useGetPublishedImages, useCreateImage, useUpdatePublishedImage, useDeleteImage properly handle backend responses, error states, cache invalidation, and toast notifications; ensure ExternalBlob integration works correctly"
+        },
+        {
+          "path": "frontend/src/components/ProfileSetup.tsx",
+          "operation": "modify",
+          "description": "Audit profile setup flow: verify form submission calls saveCallerUserProfile correctly, handles errors gracefully, and properly triggers profile refetch after successful save"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Audit authentication flow orchestration: verify profile loading state prevents flashing, ProfileSetup modal only shows for authenticated users without profiles, admin panel toggle works correctly, and logout clears all cached data"
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Audit admin panel: verify getAdminContentStats query executes correctly for admin users, all statistics display accurate data, and non-admin users cannot access the panel"
+        },
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Audit login/logout button functionality: verify login redirects to Internet Identity correctly, handles authentication state changes, and logout clears query cache and identity state"
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Provide complete project as downloadable package with all source files and assets",
+      "acceptanceCriteria": [
+        "Complete project structure is available as a downloadable archive",
+        "All source files, assets, and configuration files are included",
+        "Folder structure is organized and ready for deployment",
+        "Archive can be extracted and used independently"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Add a download project button in the footer that triggers download of a complete project archive (zip) containing all frontend and backend source files, configuration files (package.json, dfx.json, tsconfig.json, tailwind.config.js), and assets, organized in the proper folder structure for deployment"
+        }
+      ]
+    }
+  ]
+}

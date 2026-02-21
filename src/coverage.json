@@ -1,0 +1,120 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-21T21:37:56.385Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 4,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Update all references from 'Wallop' to 'Wall Pop' throughout the application, including the Header component logo text, page title in index.html, manifest.json app name and short_name, and any other branding references",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Header.tsx",
+          "frontend/index.html",
+          "frontend/public/manifest.json",
+          "frontend/src/components/LoginPrompt.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Header.tsx",
+          "frontend/index.html",
+          "frontend/public/manifest.json",
+          "frontend/src/components/LoginPrompt.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Improve text readability across the application by adding semi-transparent dark backgrounds behind all text content, especially on pages using the skull-flames background image. Ensure text has sufficient contrast (WCAG AA minimum 4.5:1) against backgrounds",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/LoginPrompt.tsx",
+          "frontend/src/components/GenerateSection.tsx",
+          "frontend/src/components/GallerySection.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/pages/HomePage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/LoginPrompt.tsx",
+          "frontend/src/components/GenerateSection.tsx",
+          "frontend/src/components/GallerySection.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/pages/HomePage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Conduct a comprehensive audit of all application functionality to identify and fix any non-working features. Test image generation (text-to-image and image-to-image), image gallery display, download functionality, delete operations, profile setup, authentication flow, and admin panel access",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/GenerateSection.tsx",
+          "frontend/src/components/GallerySection.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/ProfileSetup.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/components/Header.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/GenerateSection.tsx",
+          "frontend/src/components/GallerySection.tsx",
+          "frontend/src/components/ProfileSetup.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/components/Header.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Provide the complete project as a downloadable package that includes all source files, configuration, and assets in a single organized folder structure that can be easily copied, shared, or deployed",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Footer.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Footer.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/http-outcalls/outcall.mo",
+    "backend/main.mo",
+    "build-request.json",
+    "build-template/Dockerfile",
+    "build-template/LICENSE",
+    "build-template/README.md",
+    "build-template/deploy.sh",
+    "build-template/icp.yaml",
+    "build-template/src/backend/canister.yaml",
+    "build-template/src/frontend/canister.yaml",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.html",
+    "frontend/public/manifest.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/GallerySection.tsx",
+    "frontend/src/components/GenerateSection.tsx",
+    "frontend/src/components/Header.tsx",
+    "frontend/src/components/LoginPrompt.tsx",
+    "frontend/src/components/ProfileSetup.tsx",
+    "frontend/src/config.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/index.css",
+    "frontend/src/pages/AdminPanel.tsx",
+    "frontend/src/pages/HomePage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

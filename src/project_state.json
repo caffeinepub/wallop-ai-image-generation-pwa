@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Wall Pop - a web application with image display and background customization features",
+  "architectural_notes": [],
+  "known_issues": [
+    "Text readability issues - insufficient contrast",
+    "General functionality not working as expected"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-update-all-references-from-wallop-to-wall-pop-throughout-the-application-including-the-header-component-logo-text-page-title-in-index-html-manifest-json-app-name-and-short-name-and-any-other-branding-references",
+      "title": "Update all references from 'Wallop' to 'Wall Pop' throughout the application, including the Header component logo text, page title in index.html, manifest.json app name and short_name, and any other branding references",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-text-readability-across-the-application-by-adding-semi-transparent-dark-backgrounds-behind-all-text-content-especially-on-pages-using-the-skull-flames-background-image-ensure-text-has-sufficient-contrast-wcag-aa-minimum-4-5-1-against-backgrounds",
+      "title": "Improve text readability across the application by adding semi-transparent dark backgrounds behind all text content, especially on pages using the skull-flames background image. Ensure text has sufficient contrast (WCAG AA minimum 4.5:1) against backgrounds",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-conduct-a-comprehensive-audit-of-all-application-functionality-to-identify-and-fix-any-non-working-features-test-image-generation-text-to-image-and-image-to-image-image-gallery-display-download-functionality-delete-operations-profile-setup-authentication-flow-and-admin-panel-access",
+      "title": "Conduct a comprehensive audit of all application functionality to identify and fix any non-working features. Test image generation (text-to-image and image-to-image), image gallery display, download functionality, delete operations, profile setup, authentication flow, and admin panel access",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-the-complete-project-as-a-downloadable-package-that-includes-all-source-files-configuration-and-assets-in-a-single-organized-folder-structure-that-can-be-easily-copied-shared-or-deployed",
+      "title": "Provide the complete project as a downloadable package that includes all source files, configuration, and assets in a single organized folder structure that can be easily copied, shared, or deployed",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Fix text readability - improve contrast or add background behind text",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Provide complete project as downloadable zip file",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Review and fix all non-working functionality",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Wall Pop",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,100 @@
+{
+  "kind": "build_request",
+  "title": "Fix Wall Pop branding, improve text readability, and audit functionality",
+  "projectName": "Wall Pop",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update all references from 'Wallop' to 'Wall Pop' throughout the application, including the Header component logo text, page title in index.html, manifest.json app name and short_name, and any other branding references",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "First of all, it's called wall pop not wallop"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All visible branding displays 'Wall Pop' instead of 'Wallop'",
+        "Browser tab title shows 'Wall Pop'",
+        "PWA manifest displays 'Wall Pop' as the app name"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Improve text readability across the application by adding semi-transparent dark backgrounds behind all text content, especially on pages using the skull-flames background image. Ensure text has sufficient contrast (WCAG AA minimum 4.5:1) against backgrounds",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "it's hard to read so make the letters that I'm supposed to be reading on the actual website where I can see them or put some kind of background behind it where you can see what you're doing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All text content has a semi-transparent background overlay for improved contrast",
+        "Text is clearly readable against the skull-flames background",
+        "Text contrast ratios meet WCAG AA standards (4.5:1 for normal text)"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Conduct a comprehensive audit of all application functionality to identify and fix any non-working features. Test image generation (text-to-image and image-to-image), image gallery display, download functionality, delete operations, profile setup, authentication flow, and admin panel access",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "this shit doesn't work. You need to go through everything fine, make sure it all works exactly the way it's supposed to"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Image generation successfully creates and displays images",
+        "Gallery displays all published images correctly",
+        "Download functionality works for all images",
+        "Delete operations remove images as expected",
+        "Authentication and profile setup flow completes without errors",
+        "Admin panel displays correct statistics and is accessible only to admins",
+        "All interactive elements respond appropriately to user actions"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Provide the complete project as a downloadable package that includes all source files, configuration, and assets in a single organized folder structure that can be easily copied, shared, or deployed",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "give me one folder of all this put together where I can copy and paste it or take it wherever I want to share a zip file whatever"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Complete project structure is available as a downloadable archive",
+        "All source files, assets, and configuration files are included",
+        "Folder structure is organized and ready for deployment",
+        "Archive can be extracted and used independently"
+      ]
+    }
+  ],
+  "constraints": [
+    "Maintain the existing black/white minimalist design theme",
+    "Preserve the skull-flames background aesthetic",
+    "Keep all authentication through Internet Identity",
+    "Do not modify immutable frontend paths (hooks/useInternetIdentity, hooks/useActor, main.tsx, components/ui)"
+  ],
+  "nonGoals": [
+    "Redesigning the overall visual theme or color scheme",
+    "Adding new features beyond fixing existing functionality",
+    "Changing the backend data model or API structure"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
