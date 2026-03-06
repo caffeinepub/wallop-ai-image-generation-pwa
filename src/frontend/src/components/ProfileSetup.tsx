@@ -1,21 +1,27 @@
-import { useState } from 'react';
-import { useSaveCallerUserProfile } from '../hooks/useQueries';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useSaveCallerUserProfile } from "../hooks/useQueries";
 
 export default function ProfileSetup() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const saveProfile = useSaveCallerUserProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name.trim()) {
-      toast.error('Please enter your name');
+      toast.error("Please enter your name");
       return;
     }
 
@@ -24,9 +30,9 @@ export default function ProfileSetup() {
         name: name.trim(),
         createdAt: BigInt(Date.now() * 1_000_000),
       });
-      toast.success('Profile created successfully!');
+      toast.success("Profile created successfully!");
     } catch (error: any) {
-      console.error('Profile setup error:', error);
+      console.error("Profile setup error:", error);
       toast.error(`Failed to create profile: ${error.message}`);
     }
   };
@@ -43,7 +49,9 @@ export default function ProfileSetup() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-white">Your Name</Label>
+              <Label htmlFor="name" className="text-white">
+                Your Name
+              </Label>
               <Input
                 id="name"
                 type="text"
@@ -65,7 +73,7 @@ export default function ProfileSetup() {
                   Creating Profile...
                 </>
               ) : (
-                'Continue'
+                "Continue"
               )}
             </Button>
           </form>

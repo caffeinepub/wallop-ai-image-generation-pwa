@@ -1,7 +1,12 @@
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Wand2, Image as ImageIcon, Download } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Download, Image as ImageIcon, Wand2 } from "lucide-react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export default function LoginPrompt() {
   const { login, loginStatus } = useInternetIdentity();
@@ -10,7 +15,7 @@ export default function LoginPrompt() {
     try {
       await login();
     } catch (error: any) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
     }
   };
 
@@ -20,9 +25,9 @@ export default function LoginPrompt() {
         {/* Hero Section */}
         <div className="text-center mb-16 bg-black/80 backdrop-blur-md rounded-2xl p-8 border border-white/10">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center">
-            <img 
-              src="/assets/generated/wallop-logo-bw.dim_200x200.png" 
-              alt="Wall Pop Logo" 
+            <img
+              src="/assets/generated/wallop-logo-bw.dim_200x200.png"
+              alt="Wall Pop Logo"
               className="h-20 w-20"
             />
           </div>
@@ -30,15 +35,16 @@ export default function LoginPrompt() {
             Welcome to Wall Pop
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-            Create stunning AI-generated images from text prompts or existing images. Unlimited creativity at your fingertips.
+            Create stunning AI-generated images from text prompts or existing
+            images. Unlimited creativity at your fingertips.
           </p>
           <Button
             onClick={handleLogin}
-            disabled={loginStatus === 'logging-in'}
+            disabled={loginStatus === "logging-in"}
             size="lg"
             className="text-lg px-8 py-6 h-auto bg-white text-black hover:bg-gray-200"
           >
-            {loginStatus === 'logging-in' ? 'Connecting...' : 'Get Started'}
+            {loginStatus === "logging-in" ? "Connecting..." : "Get Started"}
           </Button>
         </div>
 
@@ -51,7 +57,8 @@ export default function LoginPrompt() {
               </div>
               <CardTitle className="text-white">Text to Image</CardTitle>
               <CardDescription className="text-gray-300">
-                Describe your vision and watch AI bring it to life with stunning detail
+                Describe your vision and watch AI bring it to life with stunning
+                detail
               </CardDescription>
             </CardHeader>
           </Card>
@@ -75,7 +82,8 @@ export default function LoginPrompt() {
               </div>
               <CardTitle className="text-white">Save & Download</CardTitle>
               <CardDescription className="text-gray-300">
-                Keep your creations forever with easy download and gallery features
+                Keep your creations forever with easy download and gallery
+                features
               </CardDescription>
             </CardHeader>
           </Card>
@@ -83,7 +91,9 @@ export default function LoginPrompt() {
 
         {/* Sample Images */}
         <div className="text-center bg-black/80 backdrop-blur-md rounded-2xl p-8 border border-white/10">
-          <h2 className="text-2xl font-bold mb-6 text-white">See What's Possible</h2>
+          <h2 className="text-2xl font-bold mb-6 text-white">
+            See What's Possible
+          </h2>
           <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
             <img
               src="/assets/generated/sample-art-1.dim_512x512.png"

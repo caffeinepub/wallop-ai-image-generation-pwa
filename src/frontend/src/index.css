@@ -3,88 +3,88 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --radius: 0.5rem;
-        --background: 1 0 0;
-        --foreground: 0.15 0 0;
-        --card: 0.98 0 0;
-        --card-foreground: 0.15 0 0;
-        --popover: 1 0 0;
-        --popover-foreground: 0.15 0 0;
-        --primary: 0.15 0 0;
-        --primary-foreground: 1 0 0;
-        --secondary: 0.95 0 0;
-        --secondary-foreground: 0.15 0 0;
-        --muted: 0.96 0 0;
-        --muted-foreground: 0.45 0 0;
-        --accent: 0.96 0 0;
-        --accent-foreground: 0.15 0 0;
-        --destructive: 0.50 0.20 25;
-        --destructive-foreground: 1 0 0;
-        --border: 0.90 0 0;
-        --input: 0.90 0 0;
-        --ring: 0.15 0 0;
-        --chart-1: 0.30 0 0;
-        --chart-2: 0.40 0 0;
-        --chart-3: 0.50 0 0;
-        --chart-4: 0.60 0 0;
-        --chart-5: 0.70 0 0;
-    }
+  :root {
+    --radius: 0.5rem;
+    --background: 1 0 0;
+    --foreground: 0.15 0 0;
+    --card: 0.98 0 0;
+    --card-foreground: 0.15 0 0;
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0 0;
+    --primary: 0.15 0 0;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.95 0 0;
+    --secondary-foreground: 0.15 0 0;
+    --muted: 0.96 0 0;
+    --muted-foreground: 0.45 0 0;
+    --accent: 0.96 0 0;
+    --accent-foreground: 0.15 0 0;
+    --destructive: 0.5 0.2 25;
+    --destructive-foreground: 1 0 0;
+    --border: 0.9 0 0;
+    --input: 0.9 0 0;
+    --ring: 0.15 0 0;
+    --chart-1: 0.3 0 0;
+    --chart-2: 0.4 0 0;
+    --chart-3: 0.5 0 0;
+    --chart-4: 0.6 0 0;
+    --chart-5: 0.7 0 0;
+  }
 
-    .dark {
-        --background: 0.10 0 0;
-        --foreground: 0.98 0 0;
-        --card: 0.15 0 0;
-        --card-foreground: 0.98 0 0;
-        --popover: 0.12 0 0;
-        --popover-foreground: 0.98 0 0;
-        --primary: 0.98 0 0;
-        --primary-foreground: 0.10 0 0;
-        --secondary: 0.20 0 0;
-        --secondary-foreground: 0.98 0 0;
-        --muted: 0.20 0 0;
-        --muted-foreground: 0.60 0 0;
-        --accent: 0.25 0 0;
-        --accent-foreground: 0.98 0 0;
-        --destructive: 0.55 0.22 25;
-        --destructive-foreground: 0.98 0 0;
-        --border: 0.25 0 0;
-        --input: 0.25 0 0;
-        --ring: 0.98 0 0;
-        --chart-1: 0.70 0 0;
-        --chart-2: 0.60 0 0;
-        --chart-3: 0.50 0 0;
-        --chart-4: 0.40 0 0;
-        --chart-5: 0.30 0 0;
-    }
+  .dark {
+    --background: 0.1 0 0;
+    --foreground: 0.98 0 0;
+    --card: 0.15 0 0;
+    --card-foreground: 0.98 0 0;
+    --popover: 0.12 0 0;
+    --popover-foreground: 0.98 0 0;
+    --primary: 0.98 0 0;
+    --primary-foreground: 0.1 0 0;
+    --secondary: 0.2 0 0;
+    --secondary-foreground: 0.98 0 0;
+    --muted: 0.2 0 0;
+    --muted-foreground: 0.6 0 0;
+    --accent: 0.25 0 0;
+    --accent-foreground: 0.98 0 0;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+    --border: 0.25 0 0;
+    --input: 0.25 0 0;
+    --ring: 0.98 0 0;
+    --chart-1: 0.7 0 0;
+    --chart-2: 0.6 0 0;
+    --chart-3: 0.5 0 0;
+    --chart-4: 0.4 0 0;
+    --chart-5: 0.3 0 0;
+  }
 
-    * {
-        @apply border-border;
-    }
-    
-    body {
-        @apply bg-background text-foreground;
-        font-feature-settings: "rlig" 1, "calt" 1;
-    }
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
 @layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
-    
-    .bg-skull-flames {
-        background-image: url('/assets/IMG_7711.jpeg');
-    }
-    
-    /* Enhanced text readability utilities */
-    .text-readable-bg {
-        background-color: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(8px);
-    }
-    
-    .text-readable-bg-light {
-        background-color: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(6px);
-    }
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-skull-flames {
+    background-image: url("/assets/IMG_7711.jpeg");
+  }
+
+  /* Enhanced text readability utilities */
+  .text-readable-bg {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+  }
+
+  .text-readable-bg-light {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+  }
 }

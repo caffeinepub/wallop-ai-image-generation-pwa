@@ -1,16 +1,23 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from './useActor';
-import type { Image, ImageFormData, PromptFormData, Prompt, UserProfile, ImageType } from '../backend';
-import { toast } from 'sonner';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import type {
+  Image,
+  ImageFormData,
+  ImageType,
+  Prompt,
+  PromptFormData,
+  UserProfile,
+} from "../backend";
+import { useActor } from "./useActor";
 
 // User Profile Queries
 export function useGetCallerUserProfile() {
   const { actor, isFetching: actorFetching } = useActor();
 
   const query = useQuery<UserProfile | null>({
-    queryKey: ['currentUserProfile'],
+    queryKey: ["currentUserProfile"],
     queryFn: async () => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.getCallerUserProfile();
     },
     enabled: !!actor && !actorFetching,
@@ -30,12 +37,12 @@ export function useSaveCallerUserProfile() {
 
   return useMutation({
     mutationFn: async (profile: UserProfile) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.saveCallerUserProfile(profile);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
-      toast.success('Profile saved successfully');
+      queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
+      toast.success("Profile saved successfully");
     },
     onError: (error: Error) => {
       toast.error(`Failed to save profile: ${error.message}`);
@@ -48,7 +55,7 @@ export function useIsCallerAdmin() {
   const { actor, isFetching } = useActor();
 
   return useQuery<boolean>({
-    queryKey: ['isAdmin'],
+    queryKey: ["isAdmin"],
     queryFn: async () => {
       if (!actor) return false;
       return actor.isCallerAdmin();
@@ -61,9 +68,9 @@ export function useGetAdminContentStats() {
   const { actor, isFetching } = useActor();
 
   return useQuery({
-    queryKey: ['adminContentStats'],
+    queryKey: ["adminContentStats"],
     queryFn: async () => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.getAdminContentStats();
     },
     enabled: !!actor && !isFetching,
@@ -75,7 +82,7 @@ export function useGetPublishedImages() {
   const { actor, isFetching } = useActor();
 
   return useQuery<Image[]>({
-    queryKey: ['publishedImages'],
+    queryKey: ["publishedImages"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getPublishedImages();
@@ -88,7 +95,7 @@ export function useGetPublishedImagesByType(imageType: ImageType) {
   const { actor, isFetching } = useActor();
 
   return useQuery<Image[]>({
-    queryKey: ['publishedImages', imageType],
+    queryKey: ["publishedImages", imageType],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getPublishedImagesByType(imageType);
@@ -101,7 +108,7 @@ export function useSearchImages(searchTerm: string) {
   const { actor, isFetching } = useActor();
 
   return useQuery<Image[]>({
-    queryKey: ['searchImages', searchTerm],
+    queryKey: ["searchImages", searchTerm],
     queryFn: async () => {
       if (!actor) return [];
       if (!searchTerm) return [];
@@ -115,7 +122,7 @@ export function useGetAllImageTags() {
   const { actor, isFetching } = useActor();
 
   return useQuery<string[]>({
-    queryKey: ['imageTags'],
+    queryKey: ["imageTags"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getAllImageTags();
@@ -130,14 +137,17 @@ export function useCreateImage() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ imageId, form }: { imageId: string; form: ImageFormData }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      imageId,
+      form,
+    }: { imageId: string; form: ImageFormData }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.createImage(imageId, form);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publishedImages'] });
-      queryClient.invalidateQueries({ queryKey: ['adminContentStats'] });
-      toast.success('Image created successfully');
+      queryClient.invalidateQueries({ queryKey: ["publishedImages"] });
+      queryClient.invalidateQueries({ queryKey: ["adminContentStats"] });
+      toast.success("Image created successfully");
     },
     onError: (error: Error) => {
       toast.error(`Failed to create image: ${error.message}`);
@@ -151,13 +161,13 @@ export function useDeleteImage() {
 
   return useMutation({
     mutationFn: async (imageId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.deleteImage(imageId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publishedImages'] });
-      queryClient.invalidateQueries({ queryKey: ['adminContentStats'] });
-      toast.success('Image deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ["publishedImages"] });
+      queryClient.invalidateQueries({ queryKey: ["adminContentStats"] });
+      toast.success("Image deleted successfully");
     },
     onError: (error: Error) => {
       toast.error(`Failed to delete image: ${error.message}`);
@@ -171,13 +181,13 @@ export function useUnpublishImage() {
 
   return useMutation({
     mutationFn: async (imageId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.unpublishImage(imageId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publishedImages'] });
-      queryClient.invalidateQueries({ queryKey: ['adminContentStats'] });
-      toast.success('Image unpublished successfully');
+      queryClient.invalidateQueries({ queryKey: ["publishedImages"] });
+      queryClient.invalidateQueries({ queryKey: ["adminContentStats"] });
+      toast.success("Image unpublished successfully");
     },
     onError: (error: Error) => {
       toast.error(`Failed to unpublish image: ${error.message}`);
@@ -190,7 +200,7 @@ export function useGetActivePrompts() {
   const { actor, isFetching } = useActor();
 
   return useQuery<Prompt[]>({
-    queryKey: ['activePrompts'],
+    queryKey: ["activePrompts"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getActivePrompts();
@@ -204,12 +214,15 @@ export function useCreatePrompt() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ promptId, form }: { promptId: string; form: PromptFormData }) => {
-      if (!actor) throw new Error('Actor not available');
+    mutationFn: async ({
+      promptId,
+      form,
+    }: { promptId: string; form: PromptFormData }) => {
+      if (!actor) throw new Error("Actor not available");
       return actor.createPrompt(promptId, form);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['activePrompts'] });
+      queryClient.invalidateQueries({ queryKey: ["activePrompts"] });
     },
     onError: (error: Error) => {
       toast.error(`Failed to create prompt: ${error.message}`);
@@ -223,11 +236,11 @@ export function useCompletePrompt() {
 
   return useMutation({
     mutationFn: async (promptId: string) => {
-      if (!actor) throw new Error('Actor not available');
+      if (!actor) throw new Error("Actor not available");
       return actor.completePrompt(promptId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['activePrompts'] });
+      queryClient.invalidateQueries({ queryKey: ["activePrompts"] });
     },
     onError: (error: Error) => {
       toast.error(`Failed to complete prompt: ${error.message}`);
@@ -240,7 +253,7 @@ export function useGetDailyLimitReached() {
   const { actor, isFetching } = useActor();
 
   return useQuery<boolean>({
-    queryKey: ['dailyLimitReached'],
+    queryKey: ["dailyLimitReached"],
     queryFn: async () => {
       if (!actor) return false;
       return actor.getDailyLimitReached();

@@ -1,21 +1,26 @@
-import { useInternetIdentity } from './hooks/useInternetIdentity';
-import { useGetCallerUserProfile } from './hooks/useQueries';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from 'next-themes';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import ProfileSetup from './components/ProfileSetup';
-import HomePage from './pages/HomePage';
-import AdminPanel from './pages/AdminPanel';
-import { useState } from 'react';
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
+import { useState } from "react";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import ProfileSetup from "./components/ProfileSetup";
+import { useInternetIdentity } from "./hooks/useInternetIdentity";
+import { useGetCallerUserProfile } from "./hooks/useQueries";
+import AdminPanel from "./pages/AdminPanel";
+import HomePage from "./pages/HomePage";
 
 export default function App() {
   const { identity, isInitializing } = useInternetIdentity();
-  const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
+  const {
+    data: userProfile,
+    isLoading: profileLoading,
+    isFetched,
+  } = useGetCallerUserProfile();
   const [showAdmin, setShowAdmin] = useState(false);
 
   const isAuthenticated = !!identity;
-  const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
+  const showProfileSetup =
+    isAuthenticated && !profileLoading && isFetched && userProfile === null;
 
   if (isInitializing) {
     return (
@@ -33,7 +38,10 @@ export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <div className="flex min-h-screen flex-col bg-background bg-skull-flames bg-cover bg-center bg-fixed">
-        <Header onAdminClick={() => setShowAdmin(!showAdmin)} showAdmin={showAdmin} />
+        <Header
+          onAdminClick={() => setShowAdmin(!showAdmin)}
+          showAdmin={showAdmin}
+        />
         <main className="flex-1">
           {showProfileSetup ? (
             <ProfileSetup />

@@ -1,8 +1,21 @@
-import { useGetAdminContentStats, useIsCallerAdmin } from '../hooks/useQueries';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, AlertCircle, BarChart3, Image, MessageSquare, X } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  AlertCircle,
+  BarChart3,
+  Image,
+  Loader2,
+  MessageSquare,
+  X,
+} from "lucide-react";
+import { useGetAdminContentStats, useIsCallerAdmin } from "../hooks/useQueries";
 
 interface AdminPanelProps {
   onClose: () => void;
@@ -25,9 +38,14 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   if (!isAdmin) {
     return (
       <div className="container max-w-6xl px-4 py-8">
-        <Alert variant="destructive" className="bg-red-950/80 border-red-500/50">
+        <Alert
+          variant="destructive"
+          className="bg-red-950/80 border-red-500/50"
+        >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-white">You do not have admin access.</AlertDescription>
+          <AlertDescription className="text-white">
+            You do not have admin access.
+          </AlertDescription>
         </Alert>
       </div>
     );
@@ -37,10 +55,17 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     <div className="container max-w-6xl px-4 py-8">
       <div className="flex items-center justify-between mb-8 bg-black/80 backdrop-blur-md rounded-lg p-6 border border-white/20">
         <div>
-          <h1 className="text-3xl font-bold mb-2 text-white">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-2 text-white">
+            Admin Dashboard
+          </h1>
           <p className="text-gray-300">Monitor and manage Wall Pop content</p>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/10">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onClose}
+          className="text-white hover:bg-white/10"
+        >
           <X className="h-5 w-5" />
         </Button>
       </div>
@@ -49,10 +74,14 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
         <div className="space-y-6">
           {/* Limit Status */}
           {stats.limitStats.dailyLimitReached && (
-            <Alert variant="destructive" className="bg-red-950/80 border-red-500/50">
+            <Alert
+              variant="destructive"
+              className="bg-red-950/80 border-red-500/50"
+            >
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-white">
-                Daily generation limit has been reached. New generations will be available tomorrow.
+                Daily generation limit has been reached. New generations will be
+                available tomorrow.
               </AlertDescription>
             </Alert>
           )}
@@ -70,11 +99,15 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Published:</span>
-                    <span className="font-semibold text-white">{Number(stats.imageStats.published)}</span>
+                    <span className="font-semibold text-white">
+                      {Number(stats.imageStats.published)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Created:</span>
-                    <span className="font-semibold text-white">{Number(stats.imageStats.created)}</span>
+                    <span className="font-semibold text-white">
+                      {Number(stats.imageStats.created)}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -91,11 +124,15 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Active:</span>
-                    <span className="font-semibold text-white">{Number(stats.promptStats.active)}</span>
+                    <span className="font-semibold text-white">
+                      {Number(stats.promptStats.active)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Used:</span>
-                    <span className="font-semibold text-white">{Number(stats.promptStats.used)}</span>
+                    <span className="font-semibold text-white">
+                      {Number(stats.promptStats.used)}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -112,14 +149,22 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Prompt Cap:</span>
-                    <span className={`font-semibold ${stats.limitStats.dailyPromptCapReached ? 'text-red-400' : 'text-green-400'}`}>
-                      {stats.limitStats.dailyPromptCapReached ? 'Reached' : 'OK'}
+                    <span
+                      className={`font-semibold ${stats.limitStats.dailyPromptCapReached ? "text-red-400" : "text-green-400"}`}
+                    >
+                      {stats.limitStats.dailyPromptCapReached
+                        ? "Reached"
+                        : "OK"}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-300">Upload Cap:</span>
-                    <span className={`font-semibold ${stats.limitStats.dailyUploadCapReached ? 'text-red-400' : 'text-green-400'}`}>
-                      {stats.limitStats.dailyUploadCapReached ? 'Reached' : 'OK'}
+                    <span
+                      className={`font-semibold ${stats.limitStats.dailyUploadCapReached ? "text-red-400" : "text-green-400"}`}
+                    >
+                      {stats.limitStats.dailyUploadCapReached
+                        ? "Reached"
+                        : "OK"}
                     </span>
                   </div>
                 </div>
@@ -130,66 +175,106 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
           {/* Type Breakdown */}
           <Card className="border-white/20 bg-black/80 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-white">Image Types Breakdown</CardTitle>
-              <CardDescription className="text-gray-300">Distribution of images by generation type</CardDescription>
+              <CardTitle className="text-white">
+                Image Types Breakdown
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Distribution of images by generation type
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold mb-3 text-sm text-gray-300">Published Images</h3>
+                  <h3 className="font-semibold mb-3 text-sm text-gray-300">
+                    Published Images
+                  </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Text to Image:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.textToImage)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.textToImage)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-white">Image to Image:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.imageToImage)}</span>
+                      <span className="text-sm text-white">
+                        Image to Image:
+                      </span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.imageToImage)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-white">Classic Painting:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.classicPainting)}</span>
+                      <span className="text-sm text-white">
+                        Classic Painting:
+                      </span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.classicPainting)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Sketch:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.sketch)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.sketch)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Photo:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.photo)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.photo)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Mixed Media:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.published.mixedMedia)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.published.mixedMedia)}
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-3 text-sm text-gray-300">All Created Images</h3>
+                  <h3 className="font-semibold mb-3 text-sm text-gray-300">
+                    All Created Images
+                  </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Text to Image:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.textToImage)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.textToImage)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-white">Image to Image:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.imageToImage)}</span>
+                      <span className="text-sm text-white">
+                        Image to Image:
+                      </span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.imageToImage)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-white">Classic Painting:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.classicPainting)}</span>
+                      <span className="text-sm text-white">
+                        Classic Painting:
+                      </span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.classicPainting)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Sketch:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.sketch)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.sketch)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Photo:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.photo)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.photo)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-white">Mixed Media:</span>
-                      <span className="font-medium text-white">{Number(stats.typeStats.created.mixedMedia)}</span>
+                      <span className="font-medium text-white">
+                        {Number(stats.typeStats.created.mixedMedia)}
+                      </span>
                     </div>
                   </div>
                 </div>
