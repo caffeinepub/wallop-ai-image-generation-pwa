@@ -1,0 +1,102 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-all-references-from-wallop-to-wall-pop-throughout-the-application-including-the-header-component-logo-text-page-title-in-index-html-manifest-json-app-name-and-short-name-and-any-other-branding-references",
+      "featureTitle": "Update all references from 'Wallop' to 'Wall Pop' throughout the application, including the Header component logo text, page title in index.html, manifest.json app name and short_name, and any other branding references",
+      "files": [
+        "frontend/index.html",
+        "frontend/public/manifest.json",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/components/LoginPrompt.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-improve-text-readability-across-the-application-by-adding-semi-transparent-dark-backgrounds-behind-all-text-content-especially-on-pages-using-the-skull-flames-background-image-ensure-text-has-sufficient-contrast-wcag-aa-minimum-4-5-1-against-backgrounds",
+      "featureTitle": "Improve text readability across the application by adding semi-transparent dark backgrounds behind all text content, especially on pages using the skull-flames background image. Ensure text has sufficient contrast (WCAG AA minimum 4.5:1) against backgrounds",
+      "files": [
+        "frontend/src/components/GallerySection.tsx",
+        "frontend/src/components/GenerateSection.tsx",
+        "frontend/src/components/LoginPrompt.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/AdminPanel.tsx",
+        "frontend/src/pages/HomePage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-conduct-a-comprehensive-audit-of-all-application-functionality-to-identify-and-fix-any-non-working-features-test-image-generation-text-to-image-and-image-to-image-image-gallery-display-download-functionality-delete-operations-profile-setup-authentication-flow-and-admin-panel-access",
+      "featureTitle": "Conduct a comprehensive audit of all application functionality to identify and fix any non-working features. Test image generation (text-to-image and image-to-image), image gallery display, download functionality, delete operations, profile setup, authentication flow, and admin panel access",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/GallerySection.tsx",
+        "frontend/src/components/GenerateSection.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/components/ProfileSetup.tsx",
+        "frontend/src/pages/AdminPanel.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-the-complete-project-as-a-downloadable-package-that-includes-all-source-files-configuration-and-assets-in-a-single-organized-folder-structure-that-can-be-easily-copied-shared-or-deployed",
+      "featureTitle": "Provide the complete project as a downloadable package that includes all source files, configuration, and assets in a single organized folder structure that can be easily copied, shared, or deployed",
+      "files": [
+        "frontend/src/components/Footer.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
