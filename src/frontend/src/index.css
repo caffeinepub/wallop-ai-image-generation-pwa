@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Font Face Declarations ─────────────────────────────────────── */
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/assets/fonts/CabinetGrotesk-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mona Sans";
+  src: url("/assets/fonts/MonaSans-Variable.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -64,7 +81,18 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Mona Sans", "Cabinet Grotesk", system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Cabinet Grotesk", "Mona Sans", system-ui, sans-serif;
+    font-weight: 800;
   }
 }
 
@@ -86,5 +114,32 @@
   .text-readable-bg-light {
     background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(6px);
+  }
+
+  /* Ensure all interactive elements over skull background are readable */
+  .wallpop-input {
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 600;
+  }
+
+  .wallpop-input::placeholder {
+    color: rgba(156, 163, 175, 1);
+  }
+
+  .wallpop-button {
+    background-color: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .wallpop-button:hover {
+    background-color: white;
+    color: black;
   }
 }

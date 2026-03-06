@@ -40,8 +40,8 @@ interface GeneratedImage {
   url: string;
   prompt: string;
   imageType: ImageType;
-  blob: ExternalBlob;
   timestamp: number;
+  isLoading?: boolean;
 }
 
 interface HistoryState {
@@ -125,53 +125,31 @@ export default function GenerateSection() {
       }
       setUploadedImage(file);
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadPreview(e.target?.result as string);
+      reader.onload = (ev) => {
+        setUploadPreview(ev.target?.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const generateImageBlob = async (): Promise<{
-    blob: Blob;
-    externalBlob: ExternalBlob;
-  }> => {
-    // Create a placeholder image blob
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      // Create dramatic gradient background
-      const gradient = ctx.createLinearGradient(0, 0, 512, 512);
-      gradient.addColorStop(0, "#1a1a1a");
-      gradient.addColorStop(0.5, "#4a4a4a");
-      gradient.addColorStop(1, "#0a0a0a");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, 512, 512);
+  const buildPollinationsUrl = (promptText: string): string => {
+    const seed = Math.floor(Math.random() * 999999);
+    // Map image type to style modifier
+    const styleModifiers: Record<ImageType, string> = {
+      [ImageType.textToImage]: "",
+      [ImageType.imageToImage]: uploadedImage
+        ? " (based on uploaded image style)"
+        : "",
+      [ImageType.classicPainting]: ", oil painting, classical art style",
+      [ImageType.sketch]: ", pencil sketch, hand-drawn illustration",
+      [ImageType.photo]: ", photorealistic, professional photography, 4K",
+      [ImageType.mixedMedia]: ", mixed media art, experimental style",
+    };
 
-      // Add text
-      ctx.fillStyle = "#ffffff";
-      ctx.font = "bold 28px sans-serif";
-      ctx.textAlign = "center";
-      ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
-      ctx.shadowBlur = 10;
-      ctx.fillText("AI Generated", 256, 240);
-      ctx.font = "18px sans-serif";
-      const truncatedPrompt =
-        prompt.substring(0, 30) + (prompt.length > 30 ? "..." : "");
-      ctx.fillText(truncatedPrompt, 256, 280);
-    }
+    const modifier = styleModifiers[imageType] || "";
+    const fullPrompt = promptText.trim() + modifier;
 
-    const blob = await new Promise<Blob>((resolve) => {
-      canvas.toBlob((b) => resolve(b!), "image/png");
-    });
-
-    const arrayBuffer = await blob.arrayBuffer();
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const externalBlob = ExternalBlob.fromBytes(uint8Array);
-
-    return { blob, externalBlob };
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=512&height=512&nologo=true&seed=${seed}`;
   };
 
   const handleGenerate = async () => {
@@ -180,66 +158,67 @@ export default function GenerateSection() {
       return;
     }
 
-    if (imageType === ImageType.imageToImage && !uploadedImage) {
-      toast.error("Please upload an image for image-to-image generation");
-      return;
-    }
-
     saveToHistory();
     setIsGenerating(true);
 
-    try {
-      // Lightning-fast generation - minimal delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
+    const imageId = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const imageUrl = buildPollinationsUrl(prompt);
 
-      const { blob, externalBlob } = await generateImageBlob();
-
-      const imageId = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const callerPrincipal =
-        identity?.getPrincipal().toString() || "anonymous";
-
-      // Non-blocking backend save
-      createImage
-        .mutateAsync({
-          imageId,
-          form: {
-            creator: callerPrincipal,
-            prompt: prompt.trim(),
-            description: `Generated with ${imageType}`,
-            imageType,
-            blobs: [externalBlob],
-            tags: prompt.split(" ").slice(0, 5),
-            published: true,
-          },
-        })
-        .catch((error) => {
-          console.error("Backend save error:", error);
-        });
-
-      // Instant UI update
-      const blobUrl = URL.createObjectURL(blob);
-      setGeneratedImages((prev) => [
-        {
-          id: imageId,
-          url: blobUrl,
-          prompt: prompt.trim(),
-          imageType,
-          blob: externalBlob,
-          timestamp: Date.now(),
-        },
-        ...prev,
-      ]);
-
-      toast.success("Image generated!");
-    } catch (error: any) {
-      console.error("Generation error:", error);
-      toast.error(`Failed to generate image: ${error.message}`);
-    } finally {
-      setIsGenerating(false);
-    }
+    // Add to list immediately with isLoading = true
+    setGeneratedImages((prev) => [
+      {
+        id: imageId,
+        url: imageUrl,
+        prompt: prompt.trim(),
+        imageType,
+        timestamp: Date.now(),
+        isLoading: true,
+      },
+      ...prev,
+    ]);
   };
 
-  const handleRegenerate = async () => {
+  const handleImageLoad = (imageId: string, imageUrl: string) => {
+    setIsGenerating(false);
+    // Mark image as loaded
+    setGeneratedImages((prev) =>
+      prev.map((img) =>
+        img.id === imageId ? { ...img, isLoading: false } : img,
+      ),
+    );
+
+    toast.success("Image generated!");
+
+    // Auto-save to gallery (non-blocking)
+    const callerPrincipal = identity?.getPrincipal().toString() || "anonymous";
+    const externalBlob = ExternalBlob.fromURL(imageUrl);
+    createImage
+      .mutateAsync({
+        imageId,
+        form: {
+          creator: callerPrincipal,
+          prompt: prompt.trim(),
+          description: `Generated with ${imageType}`,
+          imageType,
+          blobs: [externalBlob],
+          tags: prompt.split(" ").slice(0, 5),
+          published: true,
+        },
+      })
+      .catch((error) => {
+        console.error("Backend save error:", error);
+      });
+  };
+
+  const handleImageError = (imageId: string) => {
+    setIsGenerating(false);
+    setGeneratedImages((prev) => prev.filter((img) => img.id !== imageId));
+    toast.error(
+      "Failed to generate image. Please try again with a different prompt.",
+    );
+  };
+
+  const handleRegenerate = () => {
     if (!prompt.trim()) {
       toast.error("Please enter a prompt");
       return;
@@ -248,66 +227,27 @@ export default function GenerateSection() {
     saveToHistory();
     setIsGenerating(true);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+    const imageId = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const imageUrl = buildPollinationsUrl(prompt);
 
-      const { blob, externalBlob } = await generateImageBlob();
-
-      const imageId = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const callerPrincipal =
-        identity?.getPrincipal().toString() || "anonymous";
-
-      createImage
-        .mutateAsync({
-          imageId,
-          form: {
-            creator: callerPrincipal,
-            prompt: prompt.trim(),
-            description: `Regenerated with ${imageType}`,
-            imageType,
-            blobs: [externalBlob],
-            tags: prompt.split(" ").slice(0, 5),
-            published: true,
-          },
-        })
-        .catch((error) => {
-          console.error("Backend save error:", error);
-        });
-
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Replace the first image
-      setGeneratedImages((prev) => {
-        const newImages = [...prev];
-        if (newImages.length > 0) {
-          newImages[0] = {
-            id: imageId,
-            url: blobUrl,
-            prompt: prompt.trim(),
-            imageType,
-            blob: externalBlob,
-            timestamp: Date.now(),
-          };
-        } else {
-          newImages.unshift({
-            id: imageId,
-            url: blobUrl,
-            prompt: prompt.trim(),
-            imageType,
-            blob: externalBlob,
-            timestamp: Date.now(),
-          });
-        }
-        return newImages;
-      });
-
-      toast.success("Image regenerated!");
-    } catch (error: any) {
-      console.error("Regeneration error:", error);
-      toast.error(`Failed to regenerate: ${error.message}`);
-    } finally {
-      setIsGenerating(false);
-    }
+    // Replace the first image or add new
+    setGeneratedImages((prev) => {
+      const newImages = [...prev];
+      const newImage: GeneratedImage = {
+        id: imageId,
+        url: imageUrl,
+        prompt: prompt.trim(),
+        imageType,
+        timestamp: Date.now(),
+        isLoading: true,
+      };
+      if (newImages.length > 0) {
+        newImages[0] = newImage;
+      } else {
+        newImages.unshift(newImage);
+      }
+      return newImages;
+    });
   };
 
   const handleReprompt = (image: GeneratedImage) => {
@@ -317,20 +257,15 @@ export default function GenerateSection() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDownload = async (image: GeneratedImage) => {
+  const handleDownload = (image: GeneratedImage) => {
     try {
-      const bytes = await image.blob.getBytes();
-      const imageBlob = new Blob([bytes], { type: "image/png" });
-      const url = URL.createObjectURL(imageBlob);
-
       const a = document.createElement("a");
-      a.href = url;
+      a.href = image.url;
       a.download = `wallpop_${image.id}.png`;
+      a.target = "_blank";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
       toast.success("Image downloaded successfully");
     } catch (error: any) {
       console.error("Download error:", error);
@@ -351,8 +286,10 @@ export default function GenerateSection() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-white">Generate Image</CardTitle>
-              <CardDescription className="text-gray-300">
+              <CardTitle className="text-white font-bold">
+                Generate Image
+              </CardTitle>
+              <CardDescription className="text-gray-300 font-medium">
                 Create stunning AI-generated images from your prompts
               </CardDescription>
             </div>
@@ -362,7 +299,8 @@ export default function GenerateSection() {
                 size="sm"
                 onClick={undo}
                 disabled={!canUndo}
-                className="gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
+                data-ocid="generate.undo_button"
+                className="gap-2 bg-black/75 border-white/30 text-white font-bold hover:bg-white hover:text-black"
               >
                 <Undo2 className="h-4 w-4" />
                 Undo
@@ -372,7 +310,8 @@ export default function GenerateSection() {
                 size="sm"
                 onClick={redo}
                 disabled={!canRedo}
-                className="gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
+                data-ocid="generate.redo_button"
+                className="gap-2 bg-black/75 border-white/30 text-white font-bold hover:bg-white hover:text-black"
               >
                 <Redo2 className="h-4 w-4" />
                 Redo
@@ -387,29 +326,92 @@ export default function GenerateSection() {
               className="bg-red-950/80 border-red-500/50"
             >
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-white">
+              <AlertDescription className="text-white font-bold">
                 Daily generation limit reached. Please try again tomorrow.
               </AlertDescription>
             </Alert>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="prompt" className="text-white">
+            <Label
+              htmlFor="prompt"
+              className="text-white font-bold text-sm bg-black/60 px-2 py-1 rounded inline-block"
+            >
               Prompt
             </Label>
             <Textarea
               id="prompt"
+              data-ocid="generate.prompt_input"
               placeholder="Describe the image you want to create..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               rows={4}
-              className="resize-none bg-black/50 border-white/20 text-white placeholder:text-gray-400"
+              className="resize-none bg-black/75 backdrop-blur-sm border-white/30 text-white font-medium placeholder:text-gray-400 focus:border-white/60"
             />
           </div>
 
+          {/* Image Upload — always visible */}
           <div className="space-y-2">
-            <Label htmlFor="imageType" className="text-white">
-              Image Type
+            <Label className="text-white font-bold text-sm bg-black/60 px-2 py-1 rounded inline-block">
+              Reference Image{" "}
+              <span className="text-gray-400 font-normal">(optional)</span>
+            </Label>
+            <div className="flex items-center gap-2 flex-wrap">
+              <Button
+                type="button"
+                variant="outline"
+                data-ocid="generate.upload_button"
+                onClick={() => fileInputRef.current?.click()}
+                className="gap-2 bg-black/75 backdrop-blur-sm border-white/30 text-white font-bold hover:bg-white hover:text-black"
+              >
+                <Upload className="h-4 w-4" />
+                {uploadedImage ? "Change Image" : "Upload Image"}
+              </Button>
+              {uploadedImage && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    setUploadedImage(null);
+                    setUploadPreview(null);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                  className="bg-black/75 text-white hover:bg-white hover:text-black border border-white/30"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+              {uploadPreview && (
+                <img
+                  src={uploadPreview}
+                  alt="Upload preview"
+                  className="h-12 w-12 rounded-md border border-white/30 object-cover"
+                />
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            {uploadPreview && (
+              <div className="mt-2">
+                <p className="text-xs text-gray-400 font-medium bg-black/60 px-2 py-1 rounded inline-block">
+                  {uploadedImage?.name} — will influence generation style
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label
+              htmlFor="imageType"
+              className="text-white font-bold text-sm bg-black/60 px-2 py-1 rounded inline-block"
+            >
+              Art Style
             </Label>
             <Select
               value={imageType}
@@ -417,89 +419,65 @@ export default function GenerateSection() {
             >
               <SelectTrigger
                 id="imageType"
-                className="bg-black/50 border-white/20 text-white"
+                data-ocid="generate.style_select"
+                className="bg-black/75 backdrop-blur-sm border-white/30 text-white font-bold hover:border-white/60"
               >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-black border-white/20">
-                <SelectItem value={ImageType.textToImage}>
+              <SelectContent className="bg-black/95 backdrop-blur-md border-white/30">
+                <SelectItem
+                  value={ImageType.textToImage}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
                   Text to Image
                 </SelectItem>
-                <SelectItem value={ImageType.imageToImage}>
+                <SelectItem
+                  value={ImageType.imageToImage}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
                   Image to Image
                 </SelectItem>
-                <SelectItem value={ImageType.classicPainting}>
+                <SelectItem
+                  value={ImageType.classicPainting}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
                   Classic Painting
                 </SelectItem>
-                <SelectItem value={ImageType.sketch}>Sketch</SelectItem>
-                <SelectItem value={ImageType.photo}>Photo</SelectItem>
-                <SelectItem value={ImageType.mixedMedia}>
+                <SelectItem
+                  value={ImageType.sketch}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
+                  Sketch
+                </SelectItem>
+                <SelectItem
+                  value={ImageType.photo}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
+                  Photo
+                </SelectItem>
+                <SelectItem
+                  value={ImageType.mixedMedia}
+                  className="text-white font-medium focus:bg-white/20 focus:text-white"
+                >
                   Mixed Media
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {imageType === ImageType.imageToImage && (
-            <div className="space-y-2">
-              <Label className="text-white">Upload Image</Label>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
-                >
-                  <Upload className="h-4 w-4" />
-                  Choose File
-                </Button>
-                {uploadedImage && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      setUploadedImage(null);
-                      setUploadPreview(null);
-                      if (fileInputRef.current) fileInputRef.current.value = "";
-                    }}
-                    className="text-white hover:bg-white hover:text-black"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-              {uploadPreview && (
-                <div className="mt-2">
-                  <img
-                    src={uploadPreview}
-                    alt="Upload preview"
-                    className="max-w-xs rounded-lg border border-white/20"
-                  />
-                </div>
-              )}
-            </div>
-          )}
-
           <Separator className="bg-white/20" />
 
           <div className="flex gap-2">
             <Button
               onClick={handleGenerate}
-              disabled={isGenerating || limitReached}
-              className="flex-1 gap-2 bg-white text-black hover:bg-gray-300 hover:text-black"
+              disabled={isGenerating || !!limitReached}
+              data-ocid="generate.primary_button"
+              className="flex-1 gap-2 bg-white text-black font-bold hover:bg-gray-200 hover:text-black"
             >
               {isGenerating ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Generating...
+                  Processing...
                 </>
               ) : (
                 <>
@@ -511,9 +489,10 @@ export default function GenerateSection() {
             {generatedImages.length > 0 && (
               <Button
                 onClick={handleRegenerate}
-                disabled={isGenerating || limitReached}
+                disabled={isGenerating || !!limitReached}
                 variant="outline"
-                className="gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
+                data-ocid="generate.regenerate_button"
+                className="gap-2 bg-black/75 backdrop-blur-sm border-white/30 text-white font-bold hover:bg-white hover:text-black"
               >
                 <RefreshCw className="h-4 w-4" />
                 Regenerate
@@ -525,13 +504,13 @@ export default function GenerateSection() {
 
       {/* Generated Images */}
       {generatedImages.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-4" data-ocid="generate.image_result">
           <div className="bg-black/80 backdrop-blur-md rounded-lg p-4 border border-white/20">
-            <h3 className="text-lg font-semibold mb-4 text-white">
+            <h3 className="text-lg font-bold mb-4 text-white">
               Generated Images
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {generatedImages.map((image) => (
+              {generatedImages.map((image, index) => (
                 <Card
                   key={image.id}
                   className={`overflow-hidden border-white/20 bg-black/60 backdrop-blur-sm ${
@@ -539,15 +518,28 @@ export default function GenerateSection() {
                   }`}
                 >
                   <CardContent className="p-0">
-                    <div className="relative aspect-square">
+                    <div className="relative aspect-square bg-black/80">
+                      {/* Always render the img for loading, show spinner overlay on top */}
                       <img
                         src={image.url}
                         alt={image.prompt}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full object-cover transition-opacity duration-500 ${
+                          image.isLoading ? "opacity-0" : "opacity-100"
+                        }`}
+                        onLoad={() => handleImageLoad(image.id, image.url)}
+                        onError={() => handleImageError(image.id)}
                       />
+                      {image.isLoading && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+                          <Loader2 className="h-12 w-12 animate-spin text-white mb-3" />
+                          <p className="text-white font-bold text-sm bg-black/60 px-3 py-1 rounded">
+                            Processing...
+                          </p>
+                        </div>
+                      )}
                     </div>
                     <div className="p-4 space-y-3 bg-black/80">
-                      <p className="text-sm text-white line-clamp-2">
+                      <p className="text-sm text-white font-medium line-clamp-2">
                         {image.prompt}
                       </p>
                       <div className="flex gap-2">
@@ -555,7 +547,9 @@ export default function GenerateSection() {
                           size="sm"
                           variant="outline"
                           onClick={() => handleDownload(image)}
-                          className="flex-1 gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
+                          disabled={image.isLoading}
+                          data-ocid={`generate.download_button.${index + 1}`}
+                          className="flex-1 gap-2 bg-black/75 border-white/30 text-white font-bold hover:bg-white hover:text-black"
                         >
                           <Download className="h-3 w-3" />
                           Download
@@ -564,7 +558,8 @@ export default function GenerateSection() {
                           size="sm"
                           variant="outline"
                           onClick={() => handleReprompt(image)}
-                          className="flex-1 gap-2 bg-black/50 border-white/20 text-white hover:bg-white hover:text-black"
+                          disabled={image.isLoading}
+                          className="flex-1 gap-2 bg-black/75 border-white/30 text-white font-bold hover:bg-white hover:text-black"
                         >
                           <Edit3 className="h-3 w-3" />
                           Edit
@@ -573,7 +568,8 @@ export default function GenerateSection() {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleRemoveImage(image.id)}
-                          className="text-white hover:bg-white hover:text-black"
+                          disabled={image.isLoading}
+                          className="bg-black/75 border border-white/20 text-white font-bold hover:bg-white hover:text-black"
                         >
                           <X className="h-3 w-3" />
                         </Button>

@@ -41,9 +41,9 @@ export default function Header({ onAdminClick, showAdmin }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-black/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-black/90 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-3 bg-black/70 px-4 py-2 rounded-lg">
+        <div className="flex items-center gap-3 bg-black/70 px-4 py-2 rounded-lg border border-white/10">
           <div className="flex h-10 w-10 items-center justify-center">
             <img
               src="/assets/generated/wallop-logo-bw.dim_200x200.png"
@@ -52,18 +52,26 @@ export default function Header({ onAdminClick, showAdmin }: HeaderProps) {
             />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">Wall Pop</h1>
-            <p className="text-xs text-gray-300">AI Image Generation</p>
+            <h1 className="text-xl font-bold text-white tracking-wide">
+              Wall Pop
+            </h1>
+            <p className="text-xs text-gray-300 font-medium">
+              AI Image Generation
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {isAdmin && (
             <Button
-              variant={showAdmin ? "default" : "ghost"}
+              variant={showAdmin ? "default" : "outline"}
               size="sm"
               onClick={onAdminClick}
-              className="gap-2 text-white bg-black/70 hover:bg-white hover:text-black"
+              className={`gap-2 font-bold border-white/30 ${
+                showAdmin
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black/75 text-white hover:bg-white hover:text-black"
+              }`}
             >
               <Settings className="h-4 w-4" />
               <span className="hidden sm:inline">Admin</span>
@@ -72,9 +80,12 @@ export default function Header({ onAdminClick, showAdmin }: HeaderProps) {
           <Button
             onClick={handleAuth}
             disabled={disabled}
-            variant={isAuthenticated ? "outline" : "default"}
             size="sm"
-            className="text-white bg-black/70 hover:bg-white hover:text-black"
+            className={`font-bold border border-white/30 ${
+              isAuthenticated
+                ? "bg-black/75 text-white hover:bg-white hover:text-black"
+                : "bg-white text-black hover:bg-gray-200"
+            }`}
           >
             {buttonText}
           </Button>

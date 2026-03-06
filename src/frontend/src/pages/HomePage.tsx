@@ -23,14 +23,16 @@ export default function HomePage() {
           <TabsList className="grid w-full grid-cols-2 bg-transparent">
             <TabsTrigger
               value="generate"
-              className="gap-2 data-[state=active]:bg-white data-[state=active]:text-black text-white"
+              data-ocid="nav.generate_tab"
+              className="gap-2 data-[state=active]:bg-white data-[state=active]:text-black text-white font-bold data-[state=inactive]:hover:bg-white/10"
             >
               <Wand2 className="h-4 w-4" />
               Generate
             </TabsTrigger>
             <TabsTrigger
               value="gallery"
-              className="gap-2 data-[state=active]:bg-white data-[state=active]:text-black text-white"
+              data-ocid="nav.gallery_tab"
+              className="gap-2 data-[state=active]:bg-white data-[state=active]:text-black text-white font-bold data-[state=inactive]:hover:bg-white/10"
             >
               <Image className="h-4 w-4" />
               Gallery
