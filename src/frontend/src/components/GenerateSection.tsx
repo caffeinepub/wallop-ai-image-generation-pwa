@@ -35,6 +35,42 @@ import { ExternalBlob, ImageType } from "../backend";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useCreateImage, useGetDailyLimitReached } from "../hooks/useQueries";
 
+const STYLE_PRESETS: Record<string, { label: string; keywords: string }> = {
+  none: { label: "No Style", keywords: "" },
+  retro80s: {
+    label: "Retro 80s",
+    keywords: "neon grids, synthwave, retro 80s aesthetic, vibrant neon colors",
+  },
+  grunge90s: {
+    label: "90s Grunge",
+    keywords: "grunge aesthetic, faded, ripped edges, 90s distressed texture",
+  },
+  neonGlow: {
+    label: "Neon Glow",
+    keywords: "cyberpunk neon, glowing pink and blue, neon lights, futuristic",
+  },
+  monochrome: {
+    label: "Monochrome",
+    keywords: "black and white, high contrast monochrome, dramatic shadows",
+  },
+  chromeMetallic: {
+    label: "Chrome Metallic",
+    keywords: "chrome metallic, shiny reflective surface, liquid metal",
+  },
+  offsetPrint: {
+    label: "Offset Print",
+    keywords: "vintage halftone, offset print, retro poster art",
+  },
+  surrealDream: {
+    label: "Surreal Dream",
+    keywords: "surrealist, melting objects, floating, dreamlike",
+  },
+  lineArt: {
+    label: "Minimalist Line Art",
+    keywords: "minimalist, clean line art, simple outlines, geometric",
+  },
+};
+
 interface GeneratedImage {
   id: string;
   url: string;
@@ -56,6 +92,7 @@ export default function GenerateSection() {
   const { identity } = useInternetIdentity();
   const [prompt, setPrompt] = useState("");
   const [imageType, setImageType] = useState<ImageType>(ImageType.textToImage);
+  const [selectedStyle, setSelectedStyle] = useState("none");
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [uploadPreview, setUploadPreview] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -147,7 +184,11 @@ export default function GenerateSection() {
     };
 
     const modifier = styleModifiers[imageType] || "";
-    const fullPrompt = promptText.trim() + modifier;
+    const styleKeywords = STYLE_PRESETS[selectedStyle]?.keywords || "";
+    const fullPrompt =
+      promptText.trim() +
+      (styleKeywords ? `, ${styleKeywords}` : "") +
+      modifier;
 
     return `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=512&height=512&nologo=true&seed=${seed}`;
   };
@@ -403,6 +444,41 @@ export default function GenerateSection() {
                   {uploadedImage?.name} — will influence generation style
                 </p>
               </div>
+            )}
+          </div>
+
+          {/* Style Preset Picker */}
+          <div className="space-y-2">
+            <Label
+              htmlFor="stylePreset"
+              className="text-white font-bold text-sm bg-black/60 px-2 py-1 rounded inline-block"
+            >
+              Style Preset
+            </Label>
+            <Select value={selectedStyle} onValueChange={setSelectedStyle}>
+              <SelectTrigger
+                id="stylePreset"
+                data-ocid="generate.style_picker_select"
+                className="bg-black/75 backdrop-blur-sm border-white/30 text-white font-bold hover:border-white/60"
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-black/95 backdrop-blur-md border-white/30">
+                {Object.entries(STYLE_PRESETS).map(([key, preset]) => (
+                  <SelectItem
+                    key={key}
+                    value={key}
+                    className="text-white font-medium focus:bg-white/20 focus:text-white"
+                  >
+                    {preset.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedStyle !== "none" && (
+              <p className="text-xs text-gray-400 font-medium bg-black/60 px-2 py-1 rounded inline-block">
+                Keywords: {STYLE_PRESETS[selectedStyle].keywords}
+              </p>
             )}
           </div>
 
